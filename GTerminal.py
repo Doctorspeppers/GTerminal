@@ -1,40 +1,49 @@
 #-*- coding:utf-8 -*-
+import pip
+def install(package):
+    pip.main(['install', package])
+install('requests')
+install('bs4')
 import csv
 import requests
 from bs4 import BeautifulSoup
-cont = 0
-search = raw_input("Escreva sua pesquisa:")
-print(search)
-resultado_quant = raw_input("Quantos resultados você quer?\nEscreva um numero:")
-path = raw_input("Onde deseja salvar o arquivo?Escreva um local ou nome:")
-with open('caracteres.csv') as f:
-	f_csv = csv.DictReader(f)
-	for row in f_csv:
-		search = search.replace(row['simb'], row['ASC'])
-print(search)
-numlinks = 0
 
-trabalho = True
-while trabalho == True:
-	cont = cont+10
-	page = req = requests.request('GET', "https://www.google.com.br/search?q="+search+"&oq="+search+"&start="+str(cont))
-	soup = BeautifulSoup(page.content, 'html.parser')
-	print(page.status_code)
-	resultado = soup.find_all('h3', class_='r')
-	arquivo = open(path+'.html', 'a+')
+class search():
+	def __init__(self, search, nPage, proxies=None):
+		"""
+			@params str search
+			@param int nPage
+			@params dict proxies={'https': 'http://10.10.1.10:1080'}
+		"""
+		self.search = ReplaceChar(search, paginas)
+		self.page = []
+		self.nPage = nPage*10
+		self.result = []
+		self.proxies = proxies
 
-	for x in resultado:
-		x = str(x)+"\n"
-		x = x.replace('/url?q=', "")
-		x1 = x.split("&amp", 1)
-		x2 = x1[1].split(">", 1)
-		print(x1, x2)
-		x = x1[0]+"\">"+x2[1]
-		arquivo.write(x)
-		numlinks = numlinks+1
-		if numlinks == int(resultado_quant):
-			break
-	if numlinks == int(resultado_quant):
-		break
-	if int(resultado_quant) < int(cont):
-		trabalho = False
+	def Run(self):
+		count = 0
+		while nPage >= count:
+			if proxies != None:
+				self.page.append(requests.request('GET', "https://www.google.com.br/search?q="+search+"&oq="+search+"&start="+str(cont),proxies=self.proxies))
+				count = count*10
+			else:
+				self.page.append(requests.request('GET', "https://www.google.com.br/search?q="+search+"&oq="+search+"&start="+str(cont)))
+				count = count*10
+		for x in range(0, len(page)):
+			self.result.append(soup.find("div", {"id": "search"}))
+
+	def SaveInHtml(self, path):
+		arquivo = open(path+'result.html', 'a+')
+		for x in result:
+			for x in result:
+				arquivo.write(x)
+		arquivo.close()
+
+
+	def ReplaceChar(self, string):
+		with open('caracteres.csv') as f:
+			f_csv = csv.DictReader(f)
+			for row in f_csv:
+				string = string.replace(row['simb'], row['ASC'])
+		return string
