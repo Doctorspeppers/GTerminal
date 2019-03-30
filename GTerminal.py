@@ -1,9 +1,4 @@
 #-*- coding:utf-8 -*-
-import pip
-def install(package):
-    pip.main(['install', package])
-install('requests')
-install('bs4')
 import csv
 import requests
 from bs4 import BeautifulSoup
